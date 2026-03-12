@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NeuroTask AI — Automate Everything. Create Anything.</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060a;
+  --surface:#0e0e14;
+  --card:#13131b;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.12);
+  --text:#f0f0f8;
+  --muted:rgba(255,255,255,0.38);
+  --purple:#7c3aed;
+  --purple2:#9333ea;
+  --blue:#2563eb;
+  --cyan:#06b6d4;
+  --green:#10b981;
+  --pink:#ec4899;
+  --yellow:#f59e0b;
+  --gradient:linear-gradient(135deg,#7c3aed,#2563eb);
+  --glow:0 0 40px rgba(124,58,237,0.25);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;cursor:default}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:0.4;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:0 60px;height:64px;
+  display:flex;align-items:center;gap:32px;
+  background:rgba(6,6,10,0.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  transition:all .3s;
+}
+.nav-logo{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:20px;font-weight:700;color:var(--text);
+  text-decoration:none;display:flex;align-items:center;gap:9px;flex-shrink:0;
+}
+.logo-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--gradient);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;box-shadow:var(--glow);
+}
+.nav-links{display:flex;gap:4px;list-style:none;margin-left:24px}
+.nav-links a{
+  font-size:13px;font-weight:500;color:var(--muted);
+  text-decoration:none;padding:7px 14px;border-radius:7px;transition:all .2s;
+}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.nav-pill{
+  font-size:11px;font-weight:700;letter-spacing:1px;
+  background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);
+  color:#a78bfa;padding:4px 12px;border-radius:20px;
+}
+.nav-signin{
+  font-size:13px;font-weight:600;color:var(--muted);
+  background:none;border:none;cursor:pointer;
+  padding:8px 16px;border-radius:8px;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+}
+.nav-signin:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+.nav-cta{
+  background:var(--gradient);color:#fff;
+  padding:9px 22px;border-radius:8px;
+  font-size:13px;font-weight:700;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+  box-shadow:0 0 20px rgba(124,58,237,0.3);
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 24px rgba(124,58,237,0.5)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;padding-top:64px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;text-align:center;padding-left:60px;padding-right:60px;
+}
+/* Animated mesh gradient */
+.hero-mesh{
+  position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.mesh-blob{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15;
+  animation:blobFloat 8s ease-in-out infinite;
+}
+.mb1{width:600px;height:600px;background:radial-gradient(circle,#7c3aed,transparent);top:-100px;left:-100px;animation-delay:0s}
+.mb2{width:500px;height:500px;background:radial-gradient(circle,#2563eb,transparent);bottom:-100px;right:-100px;animation-delay:-3s}
+.mb3{width:400px;height:400px;background:radial-gradient(circle,#06b6d4,transparent);top:30%;left:40%;animation-delay:-6s}
+@keyframes blobFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(30px,-20px) scale(1.05)}
+  66%{transform:translate(-20px,30px) scale(0.95)}
+}
+/* Grid lines */
+.hero-grid{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 60% at center,black,transparent);
+}
+.hero-content{position:relative;z-index:1;max-width:860px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);
+  padding:7px 16px;border-radius:20px;
+  font-size:12px;font-weight:600;color:#a78bfa;
+  margin-bottom:32px;letter-spacing:.5px;
+}
+.badge-dot{width:6px;height:6px;background:#a78bfa;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.hero h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(48px,6.5vw,92px);
+  font-weight:700;line-height:1.0;
+  letter-spacing:-3px;margin-bottom:24px;
+}
+.hero h1 .grad{
+  background:linear-gradient(135deg,#a78bfa 0%,#60a5fa 50%,#34d399 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:18px;color:var(--muted);line-height:1.8;
+  max-width:580px;margin:0 auto 44px;font-weight:400;
+}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:56px}
+.btn-gradient{
+  background:var(--gradient);color:#fff;
+  padding:14px 32px;border-radius:10px;
+  font-size:15px;font-weight:700;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:all .25s;font-family:'Plus Jakarta Sans',sans-serif;
+  box-shadow:0 0 24px rgba(124,58,237,0.35);
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-gradient:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(124,58,237,0.5)}
+.btn-outline-g{
+  background:rgba(255,255,255,0.05);color:var(--text);
+  border:1px solid var(--border2);
+  padding:14px 28px;border-radius:10px;
+  font-size:15px;font-weight:600;
+  text-decoration:none;cursor:pointer;
+  transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-outline-g:hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.2)}
+.hero-social-proof{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  flex-wrap:wrap;
+}
+.proof-avatars{display:flex}
+.proof-avatar{
+  width:34px;height:34px;border-radius:50%;
+  border:2px solid var(--bg);margin-left:-10px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  background:var(--card);
+}
+.proof-avatar:first-child{margin-left:0}
+.proof-text{font-size:13px;color:var(--muted)}
+.proof-text strong{color:var(--text)}
+.proof-stars{color:var(--yellow);font-size:13px}
+
+/* ── DASHBOARD PREVIEW ── */
+.dashboard-preview{
+  width:100%;max-width:1000px;margin:72px auto 0;
+  position:relative;z-index:1;
+}
+.dp-glow{
+  position:absolute;inset:-2px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(124,58,237,0.5),rgba(37,99,235,0.5),rgba(6,182,212,0.3));
+  filter:blur(1px);z-index:-1;
+}
+.dp-window{
+  background:var(--card);border-radius:16px;
+  border:1px solid var(--border);overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,0.6);
+}
+.dp-titlebar{
+  background:rgba(255,255,255,0.03);
+  padding:14px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.dp-dots{display:flex;gap:7px}
+.dp-dot{width:12px;height:12px;border-radius:50%}
+.dp-dot:nth-child(1){background:#ff5f57}
+.dp-dot:nth-child(2){background:#febc2e}
+.dp-dot:nth-child(3){background:#28c840}
+.dp-url{
+  flex:1;background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);border-radius:6px;
+  padding:6px 14px;font-size:12px;color:var(--muted);
+  display:flex;align-items:center;gap:8px;max-width:360px;margin:0 auto;
+}
+.dp-layout{display:grid;grid-template-columns:200px 1fr;height:480px}
+.dp-sidebar{
+  background:rgba(255,255,255,0.02);
+  border-right:1px solid var(--border);
+  padding:20px 14px;display:flex;flex-direction:column;gap:4px;
+}
+.dp-nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:8px;cursor:pointer;
+  font-size:12px;font-weight:500;color:var(--muted);
+  transition:all .2s;
+}
+.dp-nav-item:hover,.dp-nav-item.active{
+  background:rgba(124,58,237,0.12);color:#a78bfa;
+}
+.dp-nav-item.active{background:rgba(124,58,237,0.15);color:#c4b5fd}
+.dp-nav-icon{font-size:15px}
+.dp-nav-divider{height:1px;background:var(--border);margin:8px 0}
+.dp-main{padding:20px;overflow:hidden;display:flex;flex-direction:column;gap:16px}
+.dp-topbar{display:flex;align-items:center;justify-content:space-between}
+.dp-greeting{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600}
+.dp-greeting span{color:var(--muted);font-size:13px;font-weight:400;margin-left:6px}
+.dp-actions{display:flex;gap:8px}
+.dp-action-btn{
+  padding:7px 14px;border-radius:7px;font-size:11px;font-weight:700;
+  border:1px solid var(--border);background:rgba(255,255,255,0.04);
+  color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:5px;
+  transition:all .2s;
+}
+.dp-action-btn.primary{background:var(--gradient);border:none;color:#fff;box-shadow:0 0 12px rgba(124,58,237,0.3)}
+/* Stats row */
+.dp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.dp-stat{
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:10px;padding:14px;
+}
+.dp-stat-label{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.dp-stat-val{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:4px}
+.dp-stat-change{font-size:10px;font-weight:600}
+.up{color:var(--green)}.down{color:var(--pink)}
+/* AI Tool interface */
+.dp-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dp-tool{
+  background:rgba(255,255,255,0.02);border:1px solid var(--border);
+  border-radius:10px;padding:14px;cursor:pointer;transition:all .3s;
+}
+.dp-tool:hover{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.05)}
+.dp-tool-header{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.dp-tool-icon{
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+}
+.ti1{background:rgba(124,58,237,0.2)}
+.ti2{background:rgba(6,182,212,0.2)}
+.ti3{background:rgba(16,185,129,0.2)}
+.ti4{background:rgba(245,158,11,0.2)}
+.dp-tool-name{font-size:12px;font-weight:700}
+.dp-tool-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.dp-tool-bar{
+  margin-top:8px;height:3px;border-radius:2px;
+  background:rgba(255,255,255,0.06);overflow:hidden;
+}
+.dp-tool-fill{height:100%;border-radius:2px;animation:fillAnim 2.5s ease-in-out infinite alternate}
+@keyframes fillAnim{0%{opacity:.7}100%{opacity:1}}
+.tf1{background:var(--purple);width:78%}
+.tf2{background:var(--cyan);width:62%}
+.tf3{background:var(--green);width:88%}
+.tf4{background:var(--yellow);width:45%}
+
+/* ── LOGOS BAR ── */
+.logos-section{
+  padding:48px 60px;border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;gap:28px;
+}
+.logos-label{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:1px;text-transform:uppercase}
+.logos-row{
+  display:flex;gap:48px;align-items:center;flex-wrap:wrap;justify-content:center;
+}
+.company-logo{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:18px;font-weight:700;color:rgba(255,255,255,0.18);
+  letter-spacing:-0.5px;transition:color .3s;cursor:default;
+}
+.company-logo:hover{color:rgba(255,255,255,0.5)}
+
+/* ── FEATURES ── */
+.features-section{padding:100px 60px;position:relative}
+.section-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.25);
+  padding:5px 14px;border-radius:20px;
+  font-size:11px;font-weight:700;color:#a78bfa;letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:16px;
+}
+.section-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(36px,4vw,56px);font-weight:700;
+  letter-spacing:-2px;line-height:1.05;margin-bottom:14px;
+}
+.section-title .grad{
+  background:linear-gradient(135deg,#a78bfa,#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.8;max-width:520px;margin-bottom:60px}
+
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:32px 28px;
+  transition:all .35s;cursor:default;position:relative;overflow:hidden;
+}
+.feat-card::before{
+  content:'';position:absolute;inset:0;border-radius:16px;
+  background:var(--gradient);opacity:0;transition:opacity .35s;
+}
+.feat-card:hover{border-color:rgba(124,58,237,0.4);transform:translateY(-4px);box-shadow:0 20px 48px rgba(0,0,0,0.4)}
+.feat-card:hover::before{opacity:0.04}
+.feat-icon-wrap{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:20px;position:relative;z-index:1;
+}
+.fi1{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.25)}
+.fi2{background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.25)}
+.fi3{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.25)}
+.fi4{background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.25)}
+.fi5{background:rgba(236,72,153,0.15);border:1px solid rgba(236,72,153,0.25)}
+.fi6{background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.25)}
+.feat-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:18px;font-weight:700;margin-bottom:10px;
+  position:relative;z-index:1;
+}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.75;position:relative;z-index:1}
+.feat-tag{
+  display:inline-block;margin-top:16px;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 10px;border-radius:20px;position:relative;z-index:1;
+}
+.ft1{background:rgba(124,58,237,0.12);color:#a78bfa}
+.ft2{background:rgba(6,182,212,0.12);color:#67e8f9}
+.ft3{background:rgba(16,185,129,0.12);color:#6ee7b7}
+.ft4{background:rgba(245,158,11,0.12);color:#fcd34d}
+.ft5{background:rgba(236,72,153,0.12);color:#f9a8d4}
+.ft6{background:rgba(37,99,235,0.12);color:#93c5fd}
+
+/* ── AI DEMO ── */
+.demo-section{padding:100px 60px;background:var(--surface)}
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-top:60px}
+.demo-left{}
+.demo-tool-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.demo-tab{
+  padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;
+  border:1px solid var(--border);background:transparent;color:var(--muted);
+  cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+}
+.demo-tab:hover,.demo-tab.active{background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.4);color:#a78bfa}
+.demo-interface{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+}
+.di-header{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.di-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.di-status{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;color:var(--green);font-weight:600;
+}
+.di-status::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+.di-body{padding:20px}
+.di-prompt-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.di-prompt{
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);
+  border-radius:10px;padding:14px 16px;font-size:13px;
+  color:var(--text);line-height:1.7;margin-bottom:16px;
+  min-height:80px;position:relative;
+}
+.di-prompt-cursor{
+  display:inline-block;width:2px;height:14px;background:#a78bfa;
+  margin-left:2px;animation:blink 1s infinite;vertical-align:middle;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.di-output-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.di-output{
+  background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);
+  border-radius:10px;padding:14px 16px;font-size:13px;
+  color:var(--text);line-height:1.8;min-height:100px;
+}
+.di-output .highlight{color:#a78bfa;font-weight:600}
+.di-output .green{color:#6ee7b7}
+.di-output .cyan{color:#67e8f9}
+.di-footer{
+  padding:14px 20px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.di-btn{
+  background:var(--gradient);color:#fff;
+  padding:9px 22px;border-radius:8px;font-size:13px;font-weight:700;
+  border:none;cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+  display:flex;align-items:center;gap:6px;
+}
+.di-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,58,237,0.4)}
+.di-tokens{font-size:11px;color:var(--muted)}
+.demo-right{}
+.demo-stats{display:flex;flex-direction:column;gap:14px}
+.dstat{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:20px 22px;
+  display:flex;align-items:center;gap:16px;
+  transition:all .3s;
+}
+.dstat:hover{border-color:rgba(124,58,237,0.3);transform:translateX(-4px)}
+.dstat-icon{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
+}
+.ds1{background:rgba(124,58,237,0.15)}
+.ds2{background:rgba(6,182,212,0.15)}
+.ds3{background:rgba(16,185,129,0.15)}
+.ds4{background:rgba(245,158,11,0.15)}
+.dstat-info{flex:1}
+.dstat-label{font-size:12px;color:var(--muted);margin-bottom:4px}
+.dstat-val{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px}
+.dstat-bar{background:rgba(255,255,255,0.06);border-radius:3px;height:3px;overflow:hidden}
+.dstat-fill{height:100%;border-radius:3px}
+.df1{background:var(--purple);width:82%}
+.df2{background:var(--cyan);width:67%}
+.df3{background:var(--green);width:91%}
+.df4{background:var(--yellow);width:54%}
+
+/* ── HOW IT WORKS ── */
+.how-section{padding:100px 60px}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-top:60px;position:relative}
+.how-steps::before{
+  content:'';position:absolute;top:32px;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(124,58,237,0.4),rgba(37,99,235,0.4),transparent);
+  z-index:0;
+}
+.how-step{
+  background:var(--card);border:1px solid var(--border);
+  padding:36px 28px;text-align:center;
+  position:relative;z-index:1;transition:all .3s;
+}
+.how-step:first-child{border-radius:16px 0 0 16px}
+.how-step:last-child{border-radius:0 16px 16px 0}
+.how-step:hover{border-color:rgba(124,58,237,0.35);background:rgba(124,58,237,0.05);transform:translateY(-4px)}
+.step-num{
+  width:52px;height:52px;border-radius:50%;
+  background:var(--gradient);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;
+  color:#fff;margin:0 auto 20px;
+  box-shadow:0 0 20px rgba(124,58,237,0.3);
+}
+.step-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;margin-bottom:10px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ── PRICING ── */
+.pricing-section{padding:100px 60px;background:var(--surface)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:60px}
+.price-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:36px 32px;
+  position:relative;transition:all .35s;
+}
+.price-card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.price-card.featured{
+  border-color:rgba(124,58,237,0.5);
+  background:linear-gradient(180deg,rgba(124,58,237,0.08) 0%,var(--card) 100%);
+  box-shadow:0 0 40px rgba(124,58,237,0.15);
+}
+.price-popular{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--gradient);color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:5px 16px;border-radius:20px;white-space:nowrap;
+}
+.price-plan{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+.price-amount{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:56px;font-weight:700;line-height:1;margin-bottom:4px;
+  letter-spacing:-2px;
+}
+.price-amount sup{font-size:22px;vertical-align:top;margin-top:12px;letter-spacing:0}
+.price-amount.grad{
+  background:linear-gradient(135deg,#a78bfa,#60a5fa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.price-period{font-size:13px;color:var(--muted);margin-bottom:32px}
+.price-features{list-style:none;margin-bottom:36px;display:flex;flex-direction:column;gap:12px}
+.pf-item{font-size:14px;color:rgba(255,255,255,0.65);display:flex;align-items:flex-start;gap:10px}
+.pf-check{color:var(--green);flex-shrink:0;font-size:14px;margin-top:1px}
+.pf-x{color:rgba(255,255,255,0.15);flex-shrink:0}
+.price-btn{
+  display:block;width:100%;padding:14px;border-radius:10px;
+  font-size:14px;font-weight:700;cursor:pointer;
+  transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+  border:none;text-decoration:none;text-align:center;
+}
+.pb-outline{background:rgba(255,255,255,0.06);color:var(--text);border:1px solid var(--border2)}
+.pb-outline:hover{background:rgba(255,255,255,0.1)}
+.pb-gradient{background:var(--gradient);color:#fff;box-shadow:0 0 20px rgba(124,58,237,0.3)}
+.pb-gradient:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(124,58,237,0.5)}
+
+/* ── TESTIMONIALS ── */
+.testi-section{padding:100px 60px}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:60px}
+.testi-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:28px;transition:all .3s;
+}
+.testi-card:hover{border-color:rgba(124,58,237,0.3);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,0.3)}
+.testi-stars{margin-bottom:16px;display:flex;gap:2px}
+.tstar{font-size:14px;color:var(--yellow)}
+.testi-text{font-size:14px;color:rgba(255,255,255,0.65);line-height:1.85;margin-bottom:22px;font-style:italic}
+.testi-user{display:flex;align-items:center;gap:12px}
+.testi-av{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.tav1{background:rgba(124,58,237,0.2)}
+.tav2{background:rgba(6,182,212,0.2)}
+.tav3{background:rgba(16,185,129,0.2)}
+.testi-name{font-weight:700;font-size:14px}
+.testi-role{font-size:12px;color:var(--muted)}
+.testi-badge{margin-left:auto;background:rgba(124,58,237,0.12);color:#a78bfa;font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px}
+
+/* ── CONTACT & CTA ── */
+.contact-section{
+  padding:100px 60px;background:var(--surface);
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;
+}
+.contact-left{}
+.contact-links{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+.c-link{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px 20px;display:flex;gap:14px;align-items:center;
+  text-decoration:none;color:var(--text);transition:all .2s;
+}
+.c-link:hover{border-color:rgba(124,58,237,0.4);transform:translateX(4px);background:rgba(124,58,237,0.05)}
+.c-link-icon{
+  width:40px;height:40px;border-radius:10px;
+  background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.2);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.c-link-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.c-link-val{font-size:14px;font-weight:600}
+.contact-form{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:36px}
+.cf-title{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:24px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.cf-field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.cf-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.cf-in,.cf-ta,.cf-sel{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  color:var(--text);padding:12px 14px;font-size:13px;
+  font-family:'Plus Jakarta Sans',sans-serif;border-radius:9px;outline:none;transition:all .2s;
+}
+.cf-in:focus,.cf-ta:focus,.cf-sel:focus{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.04)}
+.cf-in::placeholder,.cf-ta::placeholder{color:rgba(255,255,255,0.2)}
+.cf-ta{resize:vertical;min-height:100px}
+.cf-sel option{background:var(--card)}
+.cf-sub{
+  width:100%;padding:14px;background:var(--gradient);color:#fff;
+  border:none;border-radius:10px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+  box-shadow:0 0 20px rgba(124,58,237,0.25);
+}
+.cf-sub:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(124,58,237,0.4)}
+.cf-sub:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.cf-msg{margin-top:12px;padding:12px 14px;border-radius:9px;font-size:13px;font-weight:600;display:none}
+.cf-msg.ok{background:rgba(16,185,129,0.1);color:var(--green);border:1px solid rgba(16,185,129,0.25)}
+.cf-msg.err{background:rgba(236,72,153,0.1);color:var(--pink);border:1px solid rgba(236,72,153,0.2)}
+
+/* ── BIG CTA ── */
+.bigcta-section{
+  padding:100px 60px;text-align:center;position:relative;overflow:hidden;
+}
+.bigcta-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(124,58,237,0.12) 0%,transparent 70%);
+}
+.bigcta-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(48px,6vw,88px);font-weight:700;
+  letter-spacing:-3px;line-height:1;
+  margin-bottom:20px;position:relative;
+}
+.bigcta-sub{font-size:18px;color:var(--muted);margin-bottom:44px;position:relative}
+.bigcta-actions{display:flex;gap:12px;justify-content:center;position:relative;flex-wrap:wrap}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--surface);padding:60px;
+  border-top:1px solid var(--border);
+}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.ft-brand{}
+.ft-logo{
+  display:flex;align-items:center;gap:9px;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:18px;font-weight:700;color:var(--text);
+  margin-bottom:14px;text-decoration:none;
+}
+.ft-desc{font-size:13px;color:var(--muted);line-height:1.8;max-width:240px;margin-bottom:20px}
+.ft-socs{display:flex;gap:8px}
+.ft-soc{
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;text-decoration:none;transition:all .2s;
+}
+.ft-soc:hover{background:rgba(124,58,237,0.2);border-color:rgba(124,58,237,0.4)}
+.ft-col-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ft-links a{font-size:13px;color:rgba(255,255,255,0.3);text-decoration:none;transition:color .2s}
+.ft-links a:hover{color:var(--text)}
+.ft-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:28px;border-top:1px solid var(--border);flex-wrap:wrap;gap:12px;
+}
+.ft-copy{font-size:12px;color:rgba(255,255,255,0.18);line-height:1.7}
+.ft-copy a{color:#a78bfa;text-decoration:none}
+.ft-badges{display:flex;gap:8px}
+.ft-badge{
+  font-size:10px;font-weight:700;letter-spacing:.5px;
+  padding:4px 10px;border-radius:4px;
+  background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.25);
+}
+
+/* ── AUTH MODAL ── */
+.auth-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.8);
+  z-index:500;display:none;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+}
+.auth-overlay.open{display:flex}
+.auth-modal{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:44px;width:440px;max-width:95%;
+  animation:authPop .3s ease;position:relative;
+}
+@keyframes authPop{from{opacity:0;transform:scale(.95) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.auth-close{
+  position:absolute;top:16px;right:16px;
+  width:32px;height:32px;border-radius:8px;
+  background:rgba(255,255,255,0.06);border:none;cursor:pointer;
+  font-size:14px;color:var(--muted);display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.auth-close:hover{background:rgba(255,255,255,0.1);color:var(--text)}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.auth-logo-icon{width:36px;height:36px;border-radius:9px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:18px}
+.auth-logo-name{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700}
+.auth-title{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;margin-bottom:6px}
+.auth-sub{font-size:14px;color:var(--muted);margin-bottom:28px}
+.auth-tabs{display:flex;gap:0;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:3px;margin-bottom:28px}
+.auth-tab{
+  flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:700;
+  border:none;background:transparent;color:var(--muted);cursor:pointer;
+  transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+}
+.auth-tab.active{background:rgba(124,58,237,0.2);color:#a78bfa}
+.auth-social{display:flex;gap:10px;margin-bottom:20px}
+.auth-social-btn{
+  flex:1;padding:11px;border-radius:9px;font-size:13px;font-weight:600;
+  border:1px solid var(--border);background:rgba(255,255,255,0.04);
+  color:var(--text);cursor:pointer;transition:all .2s;
+  font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.auth-social-btn:hover{background:rgba(255,255,255,0.08);border-color:var(--border2)}
+.auth-divider{
+  display:flex;align-items:center;gap:12px;
+  font-size:12px;color:var(--muted);margin-bottom:20px;
+}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.auth-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.auth-in{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  color:var(--text);padding:12px 14px;font-size:14px;
+  font-family:'Plus Jakarta Sans',sans-serif;border-radius:9px;outline:none;transition:all .2s;
+}
+.auth-in:focus{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.04)}
+.auth-in::placeholder{color:rgba(255,255,255,0.2)}
+.auth-submit{
+  width:100%;padding:14px;background:var(--gradient);color:#fff;
+  border:none;border-radius:10px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .2s;font-family:'Plus Jakarta Sans',sans-serif;
+  box-shadow:0 0 20px rgba(124,58,237,0.3);margin-top:4px;
+}
+.auth-submit:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(124,58,237,0.5)}
+.auth-footer{text-align:center;font-size:12px;color:var(--muted);margin-top:16px}
+.auth-footer a{color:#a78bfa;text-decoration:none}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(70px);
+  background:rgba(20,20,32,0.95);color:var(--text);
+  padding:12px 22px;border-radius:10px;
+  font-size:13px;font-weight:600;z-index:999;
+  opacity:0;transition:all .3s;pointer-events:none;
+  border:1px solid var(--border);box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  white-space:nowrap;backdrop-filter:blur(8px);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:all .65s cubic-bezier(.16,1,.3,1)}
+.reveal.show{opacity:1;transform:translateY(0)}
+
+@media(max-width:960px){
+  nav{padding:0 20px}
+  .nav-links,.nav-pill{display:none}
+  .hero{padding:80px 20px 60px}
+  .features-section,.demo-section,.how-section,.pricing-section,.testi-section,.contact-section,.bigcta-section{padding:72px 20px}
+  .features-grid,.pricing-grid,.testi-grid{grid-template-columns:1fr}
+  .demo-grid,.contact-section{grid-template-columns:1fr}
+  .how-steps{grid-template-columns:repeat(2,1fr)}
+  .how-step:first-child{border-radius:16px 0 0 0}
+  .how-step:last-child{border-radius:0 16px 16px 0}
+  .logos-section{padding:36px 20px}
+  footer{padding:48px 20px}
+  .ft-grid{grid-template-columns:1fr 1fr}
+  .dp-layout{grid-template-columns:1fr}
+  .dp-sidebar{display:none}
+  .cf-row{grid-template-columns:1fr}
+  .auth-modal{padding:32px 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">🧠</div>
+    NeuroTask
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-pill">🚀 Now in Beta</div>
+    <button class="nav-signin" onclick="openAuth('signin')">Sign In</button>
+    <button class="nav-cta" onclick="openAuth('signup')">Start Free →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-mesh">
+    <div class="mesh-blob mb1"></div>
+    <div class="mesh-blob mb2"></div>
+    <div class="mesh-blob mb3"></div>
+  </div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span> Introducing NeuroTask AI v2.0 — Now 3x faster</div>
+    <h1>Automate Everything.<br/><span class="grad">Create Anything.</span></h1>
+    <p class="hero-sub">NeuroTask AI combines task automation, content generation, data analysis and smart workflows — all in one powerful platform built for modern teams.</p>
+    <div class="hero-actions">
+      <button class="btn-gradient" onclick="openAuth('signup')">🚀 Start for Free <span style="opacity:.7;font-weight:400">— No card needed</span></button>
+      <a href="#demo" class="btn-outline-g">▶ Watch Demo</a>
+    </div>
+    <div class="hero-social-proof">
+      <div class="proof-avatars">
+        <div class="proof-avatar">👨‍💻</div>
+        <div class="proof-avatar">👩‍💼</div>
+        <div class="proof-avatar">🧑‍🎨</div>
+        <div class="proof-avatar">👨‍🔬</div>
+        <div class="proof-avatar">👩‍💻</div>
+      </div>
+      <div class="proof-text">Trusted by <strong>12,000+</strong> professionals</div>
+      <div class="proof-stars">★★★★★</div>
+      <div class="proof-text"><strong>4.9/5</strong> average rating</div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PREVIEW -->
+  <div class="dashboard-preview reveal">
+    <div class="dp-glow"></div>
+    <div class="dp-window">
+      <div class="dp-titlebar">
+        <div class="dp-dots"><div class="dp-dot"></div><div class="dp-dot"></div><div class="dp-dot"></div></div>
+        <div class="dp-url">🔒 app.neurotask.ai/dashboard</div>
+        <div style="font-size:12px;color:var(--muted);margin-left:auto">v2.0.4</div>
+      </div>
+      <div class="dp-layout">
+        <div class="dp-sidebar">
+          <div class="dp-nav-item active"><span class="dp-nav-icon">⚡</span> Dashboard</div>
+          <div class="dp-nav-item"><span class="dp-nav-icon">🤖</span> AI Tools</div>
+          <div class="dp-nav-item"><span class="dp-nav-icon">✍️</span> Content</div>
+          <div class="dp-nav-item"><span class="dp-nav-icon">📊</span> Analytics</div>
+          <div class="dp-nav-item"><span class="dp-nav-icon">🔄</span> Automations</div>
+          <div class="dp-nav-divider"></div>
+          <div class="dp-nav-item"><span class="dp-nav-icon">⚙️</span> Settings</div>
+          <div class="dp-nav-item"><span class="dp-nav-icon">👤</span> Account</div>
+        </div>
+        <div class="dp-main">
+          <div class="dp-topbar">
+            <div class="dp-greeting">Good morning, Karthik <span>— Here's your AI summary</span></div>
+            <div class="dp-actions">
+              <div class="dp-action-btn">📅 Mar 2025</div>
+              <div class="dp-action-btn primary">✨ New Task</div>
+            </div>
+          </div>
+          <div class="dp-stats">
+            <div class="dp-stat">
+              <div class="dp-stat-label">Tasks Automated</div>
+              <div class="dp-stat-val" style="color:#a78bfa">1,284</div>
+              <div class="dp-stat-change up">↑ 23% this week</div>
+            </div>
+            <div class="dp-stat">
+              <div class="dp-stat-label">Content Generated</div>
+              <div class="dp-stat-val" style="color:#67e8f9">842</div>
+              <div class="dp-stat-change up">↑ 18% this week</div>
+            </div>
+            <div class="dp-stat">
+              <div class="dp-stat-label">Time Saved</div>
+              <div class="dp-stat-val" style="color:#6ee7b7">48h</div>
+              <div class="dp-stat-change up">↑ 8h vs last week</div>
+            </div>
+            <div class="dp-stat">
+              <div class="dp-stat-label">API Credits</div>
+              <div class="dp-stat-val" style="color:#fcd34d">7,420</div>
+              <div class="dp-stat-change down">↓ 580 used today</div>
+            </div>
+          </div>
+          <div class="dp-tools">
+            <div class="dp-tool">
+              <div class="dp-tool-header"><div class="dp-tool-icon ti1">✍️</div><div class="dp-tool-name">Content Writer</div></div>
+              <div class="dp-tool-desc">Blog posts, emails, social captions in seconds.</div>
+              <div class="dp-tool-bar"><div class="dp-tool-fill tf1"></div></div>
+            </div>
+            <div class="dp-tool">
+              <div class="dp-tool-header"><div class="dp-tool-icon ti2">🔄</div><div class="dp-tool-name">Task Automator</div></div>
+              <div class="dp-tool-desc">Automate repetitive workflows end-to-end.</div>
+              <div class="dp-tool-bar"><div class="dp-tool-fill tf2"></div></div>
+            </div>
+            <div class="dp-tool">
+              <div class="dp-tool-header"><div class="dp-tool-icon ti3">📊</div><div class="dp-tool-name">Data Analyst</div></div>
+              <div class="dp-tool-desc">Upload CSVs, get instant insights and charts.</div>
+              <div class="dp-tool-bar"><div class="dp-tool-fill tf3"></div></div>
+            </div>
+            <div class="dp-tool">
+              <div class="dp-tool-header"><div class="dp-tool-icon ti4">💬</div><div class="dp-tool-name">AI Chat</div></div>
+              <div class="dp-tool-desc">Your personal AI assistant, always available.</div>
+              <div class="dp-tool-bar"><div class="dp-tool-fill tf4"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<div class="logos-section">
+  <div class="logos-label">Trusted by teams at leading companies</div>
+  <div class="logos-row">
+    <div class="company-logo">Infosys</div>
+    <div class="company-logo">TCS</div>
+    <div class="company-logo">Wipro</div>
+    <div class="company-logo">HCLTech</div>
+    <div class="company-logo">Razorpay</div>
+    <div class="company-logo">CRED</div>
+    <div class="company-logo">Zerodha</div>
+    <div class="company-logo">Groww</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="reveal">
+    <div class="section-eyebrow">⚡ Capabilities</div>
+    <div class="section-title">Everything you need to<br/><span class="grad">work smarter</span></div>
+    <div class="section-sub">NeuroTask AI packs enterprise-grade AI into a single, beautifully simple platform that your whole team can use from day one.</div>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <div class="feat-icon-wrap fi1">✍️</div>
+      <div class="feat-name">AI Content Generation</div>
+      <div class="feat-desc">Write blog posts, marketing copy, product descriptions, emails, and social content in seconds. 50+ templates included.</div>
+      <div class="feat-tag ft1">Content</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon-wrap fi2">🔄</div>
+      <div class="feat-name">Workflow Automation</div>
+      <div class="feat-desc">Connect your apps and automate repetitive tasks. Triggers, conditions, actions — no code needed, full visual editor.</div>
+      <div class="feat-tag ft2">Automation</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon-wrap fi3">📊</div>
+      <div class="feat-name">Data Analysis & Reports</div>
+      <div class="feat-desc">Upload spreadsheets, PDFs, or databases. Get instant charts, summaries and actionable insights powered by AI.</div>
+      <div class="feat-tag ft3">Analytics</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon-wrap fi4">🧠</div>
+      <div class="feat-name">Custom AI Assistants</div>
+      <div class="feat-desc">Train AI on your company's documents and data. Deploy private assistants for customer support, HR, or sales.</div>
+      <div class="feat-tag ft4">Custom AI</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon-wrap fi5">🔌</div>
+      <div class="feat-name">200+ Integrations</div>
+      <div class="feat-desc">Slack, Notion, Google Workspace, Salesforce, HubSpot, Zapier — connect NeuroTask with every tool your team uses.</div>
+      <div class="feat-tag ft5">Integrations</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon-wrap fi6">🔒</div>
+      <div class="feat-name">Enterprise Security</div>
+      <div class="feat-desc">SOC2 Type II certified. End-to-end encryption, SSO, custom data retention policies, and audit logs for full compliance.</div>
+      <div class="feat-tag ft6">Security</div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE DEMO -->
+<section class="demo-section" id="demo">
+  <div class="reveal">
+    <div class="section-eyebrow">🤖 Live Demo</div>
+    <div class="section-title">See it in <span class="grad">action</span></div>
+    <div class="section-sub">Try the AI interface yourself — no signup needed. Switch between tools to see what NeuroTask can do.</div>
+  </div>
+  <div class="demo-grid">
+    <div class="demo-left">
+      <div class="demo-tool-tabs">
+        <button class="demo-tab active" onclick="switchDemo('write',this)">✍️ Content Writer</button>
+        <button class="demo-tab" onclick="switchDemo('code',this)">💻 Code Generator</button>
+        <button class="demo-tab" onclick="switchDemo('analyze',this)">📊 Data Analyst</button>
+        <button class="demo-tab" onclick="switchDemo('chat',this)">💬 AI Chat</button>
+      </div>
+      <div class="demo-interface">
+        <div class="di-header">
+          <div class="di-title">🧠 <span id="demoToolName">Content Writer</span></div>
+          <div class="di-status">AI Ready</div>
+        </div>
+        <div class="di-body">
+          <div class="di-prompt-label">Your Prompt</div>
+          <div class="di-prompt" id="demoPrompt">Write a compelling product description for a premium wireless headphone under ₹5,000 targeting Indian college students.<span class="di-prompt-cursor"></span></div>
+          <div class="di-output-label">AI Output</div>
+          <div class="di-output" id="demoOutput"></div>
+        </div>
+        <div class="di-footer">
+          <button class="di-btn" onclick="runDemo()">✨ Generate</button>
+          <div class="di-tokens" id="demoTokens">1,250 / 4,096 tokens</div>
+        </div>
+      </div>
+    </div>
+    <div class="demo-right">
+      <div class="demo-stats">
+        <div class="dstat reveal">
+          <div class="dstat-icon ds1">⚡</div>
+          <div class="dstat-info">
+            <div class="dstat-label">Tasks Automated Today</div>
+            <div class="dstat-val">1,284</div>
+            <div class="dstat-bar"><div class="dstat-fill df1"></div></div>
+          </div>
+        </div>
+        <div class="dstat reveal">
+          <div class="dstat-icon ds2">✍️</div>
+          <div class="dstat-info">
+            <div class="dstat-label">Content Pieces Generated</div>
+            <div class="dstat-val">48,920</div>
+            <div class="dstat-bar"><div class="dstat-fill df2"></div></div>
+          </div>
+        </div>
+        <div class="dstat reveal">
+          <div class="dstat-icon ds3">⏱️</div>
+          <div class="dstat-info">
+            <div class="dstat-label">Hours Saved This Month</div>
+            <div class="dstat-val">9,400h</div>
+            <div class="dstat-bar"><div class="dstat-fill df3"></div></div>
+          </div>
+        </div>
+        <div class="dstat reveal">
+          <div class="dstat-icon ds4">🌐</div>
+          <div class="dstat-info">
+            <div class="dstat-label">Active Teams Worldwide</div>
+            <div class="dstat-val">3,200+</div>
+            <div class="dstat-bar"><div class="dstat-fill df4"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="reveal" style="text-align:center">
+    <div class="section-eyebrow">🗺️ Process</div>
+    <div class="section-title">Up and running in <span class="grad">4 steps</span></div>
+  </div>
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <div class="step-num">1</div>
+      <div class="step-title">Create Account</div>
+      <div class="step-desc">Sign up in 30 seconds. No credit card, no commitment. Instant access to all tools.</div>
+    </div>
+    <div class="how-step reveal">
+      <div class="step-num">2</div>
+      <div class="step-title">Choose a Tool</div>
+      <div class="step-desc">Pick from content writing, automation, data analysis, or build a custom AI assistant.</div>
+    </div>
+    <div class="how-step reveal">
+      <div class="step-num">3</div>
+      <div class="step-title">Describe Your Task</div>
+      <div class="step-desc">Type what you need in plain English. NeuroTask AI understands context and executes perfectly.</div>
+    </div>
+    <div class="how-step reveal">
+      <div class="step-num">4</div>
+      <div class="step-title">Get Results</div>
+      <div class="step-desc">Review, refine, export or automate. Results in seconds, not hours. Scale without limits.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="reveal" style="text-align:center">
+    <div class="section-eyebrow">💳 Pricing</div>
+    <div class="section-title">Simple, <span class="grad">transparent</span> pricing</div>
+    <div class="section-sub" style="margin:14px auto 0">Start free. Scale as you grow. No hidden fees, no surprises. Cancel anytime.</div>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card reveal">
+      <div class="price-plan">Starter</div>
+      <div class="price-amount"><sup>₹</sup>0</div>
+      <div class="price-period">Free forever · No card needed</div>
+      <ul class="price-features">
+        <li class="pf-item"><span class="pf-check">✓</span>100 AI generations/month</li>
+        <li class="pf-item"><span class="pf-check">✓</span>3 AI tools access</li>
+        <li class="pf-item"><span class="pf-check">✓</span>Basic content templates</li>
+        <li class="pf-item"><span class="pf-check">✓</span>Community support</li>
+        <li class="pf-item"><span class="pf-x">✗</span><span style="opacity:.35">Workflow automations</span></li>
+        <li class="pf-item"><span class="pf-x">✗</span><span style="opacity:.35">API access</span></li>
+      </ul>
+      <button class="price-btn pb-outline" onclick="openAuth('signup')">Get Started Free</button>
+    </div>
+    <div class="price-card featured reveal">
+      <div class="price-popular">⚡ Most Popular</div>
+      <div class="price-plan">Pro</div>
+      <div class="price-amount grad"><sup>₹</sup>999</div>
+      <div class="price-period">per month · billed monthly</div>
+      <ul class="price-features">
+        <li class="pf-item"><span class="pf-check">✓</span>10,000 AI generations/month</li>
+        <li class="pf-item"><span class="pf-check">✓</span>All AI tools unlocked</li>
+        <li class="pf-item"><span class="pf-check">✓</span>50+ content templates</li>
+        <li class="pf-item"><span class="pf-check">✓</span>Workflow automations</li>
+        <li class="pf-item"><span class="pf-check">✓</span>API access (10K calls/mo)</li>
+        <li class="pf-item"><span class="pf-check">✓</span>Priority email support</li>
+      </ul>
+      <button class="price-btn pb-gradient" onclick="openAuth('signup')">Start Pro Trial →</button>
+    </div>
+    <div class="price-card reveal">
+      <div class="price-plan">Enterprise</div>
+      <div class="price-amount">Custom</div>
+      <div class="price-period">For teams of 10+</div>
+      <ul class="price-features">
+        <li class="pf-item"><span class="pf-check">✓</span>Unlimited generations</li>
+        <li class="pf-item"><span class="pf-check">✓</span>Custom AI model training</li>
+        <li class="pf-item"><span class="pf-check">✓</span>SSO & advanced security</li>
+        <li class="pf-item"><span class="pf-check">✓</span>Dedicated account manager</li>
+        <li class="pf-item"><span class="pf-check">✓</span>On-premise deployment</li>
+        <li class="pf-item"><span class="pf-check">✓</span>SLA + 24/7 support</li>
+      </ul>
+      <a href="#contact" class="price-btn pb-outline">Contact Sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+  <div class="reveal" style="text-align:center">
+    <div class="section-eyebrow">💬 Reviews</div>
+    <div class="section-title">Loved by <span class="grad">12,000+</span> teams</div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars"><span class="tstar">★</span><span class="tstar">★</span><span class="tstar">★</span><span class="tstar">★</span><span class="tstar">★</span></div>
+      <div class="testi-text">"NeuroTask replaced 3 separate tools for our marketing team. The content generator alone saves us 20 hours a week. The ROI was clear within the first month."</div>
+      <div class="testi-user"><div class="testi-av tav1">👩‍💼</div><div><div class="testi-name">Ananya Krishnan</div><div class="testi-role">Head of Marketing, Razorpay</div></div><div class="testi-badge">✓ Pro Plan</div></div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars"><span class="tstar">★</span><span class="tstar">★</span><span class="tstar">★</span><span class="tstar">★</span><span class="tstar">★</span></div>
+      <div class="testi-text">"As a solo developer, NeuroTask is like having a full team. I use it for code reviews, documentation, email drafts, and client reports. Absolutely indispensable."</div>
+      <div class="testi-user"><div class="testi-av tav2">👨‍💻</div><div><div class="testi-name">Arjun Mehta</div><div class="testi-role">Freelance Developer, Hyderabad</div></div><div class="testi-badge">✓ Pro Plan</div></div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars"><span class="tstar">★</span><span class="tstar">★</span><span class="tstar">★</span><span class="tstar">★</span><span class="tstar">★</span></div>
+      <div class="testi-text">"The workflow automation is next-level. We automated our entire onboarding pipeline — emails, tasks, Slack notifications — in two hours. Game changer for our ops team."</div>
+      <div class="testi-user"><div class="testi-av tav3">🧑‍🔬</div><div><div class="testi-name">Priya Nair</div><div class="testi-role">COO, Series A Startup, Bengaluru</div></div><div class="testi-badge">✓ Enterprise</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div>
+    <div class="section-eyebrow reveal">📬 Get in Touch</div>
+    <div class="section-title reveal">Talk to <span class="grad">our team</span></div>
+    <p style="font-size:15px;color:var(--muted);line-height:1.8;margin:16px 0 32px;max-width:380px">Have questions about pricing, enterprise plans, or integrations? We typically respond within 2 hours.</p>
+    <div class="contact-links">
+      <a href="tel:+918688496208" class="c-link reveal"><div class="c-link-icon">📞</div><div><div class="c-link-label">Phone</div><div class="c-link-val">+91 86884 96208</div></div></a>
+      <a href="https://wa.me/918688496208" target="_blank" class="c-link reveal"><div class="c-link-icon">💬</div><div><div class="c-link-label">WhatsApp</div><div class="c-link-val">+91 86884 96208</div></div></a>
+      <a href="mailto:karthikeyanetha7@gmail.com" class="c-link reveal"><div class="c-link-icon">✉️</div><div><div class="c-link-label">Email</div><div class="c-link-val">karthikeyanetha7@gmail.com</div></div></a>
+      <a href="https://linkedin.com/in/karthikeya-gurram-59209726a" target="_blank" class="c-link reveal"><div class="c-link-icon">💼</div><div><div class="c-link-label">LinkedIn</div><div class="c-link-val">karthikeya-gurram</div></div></a>
+      <a href="https://github.com/karthikeyanetha1" target="_blank" class="c-link reveal"><div class="c-link-icon">🐙</div><div><div class="c-link-label">GitHub</div><div class="c-link-val">karthikeyanetha1</div></div></a>
+    </div>
+  </div>
+  <div class="contact-form reveal">
+    <div class="cf-title">Send a Message</div>
+    <form id="contactForm">
+      <div class="cf-row">
+        <div class="cf-field"><label class="cf-label">Name</label><input class="cf-in" id="cfname" placeholder="Your name" required/></div>
+        <div class="cf-field"><label class="cf-label">Email</label><input class="cf-in" type="email" id="cfemail" placeholder="you@company.com" required/></div>
+      </div>
+      <div class="cf-row">
+        <div class="cf-field"><label class="cf-label">Phone</label><input class="cf-in" type="tel" id="cfphone" placeholder="+91 98765 43210"/></div>
+        <div class="cf-field"><label class="cf-label">Plan Interest</label><select class="cf-sel" id="cftopic"><option>Starter (Free)</option><option>Pro (₹999/mo)</option><option>Enterprise</option><option>General Question</option></select></div>
+      </div>
+      <div class="cf-field"><label class="cf-label">Message</label><textarea class="cf-ta" id="cfmsg" placeholder="Tell us about your use case..." required></textarea></div>
+      <button type="submit" class="cf-sub" id="cfBtn">Send Message ✨</button>
+      <div class="cf-msg" id="cfMsg"></div>
+    </form>
+  </div>
+</section>
+
+<!-- BIG CTA -->
+<section class="bigcta-section">
+  <div class="bigcta-title reveal">Ready to work<br/><span class="grad">10x smarter?</span></div>
+  <p class="bigcta-sub reveal">Join 12,000+ professionals already using NeuroTask AI. Free forever plan available.</p>
+  <div class="bigcta-actions reveal">
+    <button class="btn-gradient" onclick="openAuth('signup')" style="font-size:16px;padding:16px 40px">🚀 Start for Free Today</button>
+    <a href="tel:+918688496208" class="btn-outline-g" style="font-size:16px;padding:16px 32px">📞 Talk to Sales</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <a href="#" class="ft-logo"><div class="logo-icon">🧠</div> NeuroTask AI</a>
+      <div class="ft-desc">The all-in-one AI platform for automation, content generation, and intelligent workflows.</div>
+      <div class="ft-socs">
+        <a href="https://wa.me/918688496208" target="_blank" class="ft-soc">💬</a>
+        <a href="mailto:karthikeyanetha7@gmail.com" class="ft-soc">✉️</a>
+        <a href="https://linkedin.com/in/karthikeya-gurram-59209726a" target="_blank" class="ft-soc">💼</a>
+        <a href="https://github.com/karthikeyanetha1" target="_blank" class="ft-soc">🐙</a>
+      </div>
+    </div>
+    <div><div class="ft-col-title">Product</div><ul class="ft-links"><li><a href="#features">Features</a></li><li><a href="#demo">Live Demo</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#">Changelog</a></li><li><a href="#">API Docs</a></li></ul></div>
+    <div><div class="ft-col-title">Company</div><ul class="ft-links"><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li><li><a href="#contact">Contact</a></li><li><a href="#">Press</a></li></ul></div>
+    <div><div class="ft-col-title">Contact</div><ul class="ft-links"><li><a href="tel:+918688496208">+91 86884 96208</a></li><li><a href="mailto:karthikeyanetha7@gmail.com">karthikeyanetha7@gmail.com</a></li><li><a href="https://wa.me/918688496208" target="_blank">WhatsApp</a></li><li><a href="https://codewithkweb.com" target="_blank">codewithkweb.com</a></li></ul></div>
+  </div>
+  <div class="ft-bottom">
+    <div class="ft-copy">© 2025 NeuroTask AI. All rights reserved.<br/>Built by <a href="https://codewithkweb.com" target="_blank">CodeWithK</a> · <a href="mailto:karthikeyanetha7@gmail.com">karthikeyanetha7@gmail.com</a> · <a href="tel:+918688496208">+91 86884 96208</a></div>
+    <div class="ft-badges"><span class="ft-badge">SOC2</span><span class="ft-badge">GDPR</span><span class="ft-badge">ISO 27001</span><span class="ft-badge">99.9% Uptime</span></div>
+  </div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="authOverlay" onclick="handleAuthOverlayClick(event)">
+  <div class="auth-modal">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🧠</div>
+      <div class="auth-logo-name">NeuroTask AI</div>
+    </div>
+    <div class="auth-title" id="authTitle">Welcome back</div>
+    <div class="auth-sub" id="authSub">Sign in to your NeuroTask account</div>
+    <div class="auth-tabs">
+      <button class="auth-tab" id="signinTab" onclick="switchAuth('signin')">Sign In</button>
+      <button class="auth-tab" id="signupTab" onclick="switchAuth('signup')">Create Account</button>
+    </div>
+    <div class="auth-social">
+      <button class="auth-social-btn" onclick="socialAuth('Google')">🔵 Google</button>
+      <button class="auth-social-btn" onclick="socialAuth('GitHub')">⚫ GitHub</button>
+    </div>
+    <div class="auth-divider">or continue with email</div>
+    <div id="signupNameField" style="display:none">
+      <div class="auth-field"><label class="auth-label">Full Name</label><input class="auth-in" id="authName" placeholder="Karthik Gurram"/></div>
+    </div>
+    <div class="auth-field"><label class="auth-label">Email Address</label><input class="auth-in" id="authEmail" placeholder="you@company.com"/></div>
+    <div class="auth-field"><label class="auth-label">Password</label><input class="auth-in" type="password" id="authPass" placeholder="••••••••"/></div>
+    <button class="auth-submit" id="authSubmitBtn" onclick="handleAuth()">Sign In →</button>
+    <div class="auth-footer" id="authFooter">Don't have an account? <a href="#" onclick="switchAuth('signup');return false">Create one free →</a></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+emailjs.init("3tdUNyiRYlYZmRys7");
+
+// ── DEMO CONFIGS ──
+const DEMOS = {
+  write:{
+    name:'Content Writer',
+    prompt:'Write a compelling product description for a premium wireless headphone under ₹5,000 targeting Indian college students.',
+    output:`<span class="highlight">🎵 Sound Without Limits — boAt Rockerz Pro</span>\n\nExperience music the way it was meant to be heard. The <span class="green">boAt Rockerz Pro</span> delivers <span class="cyan">40mm dynamic drivers</span> with deep bass and crystal-clear highs — all day long on a single charge.\n\n✓ <span class="green">60-hour battery life</span>\n✓ Active Noise Cancellation\n✓ Premium faux-leather cushions\n✓ Foldable, travel-ready design\n\nAt just <span class="highlight">₹4,499</span>, it's the upgrade your ears deserve.`,
+    tokens:'1,250 / 4,096 tokens'
+  },
+  code:{
+    name:'Code Generator',
+    prompt:'Generate a React hook for fetching data from an API with loading, error, and success states. Include TypeScript types.',
+    output:`<span class="highlight">// useApi.ts — Custom React Hook</span>\n\n<span class="green">import</span> { useState, useEffect } <span class="green">from</span> 'react';\n\n<span class="cyan">interface</span> ApiState&lt;T&gt; {\n  data: T | <span class="highlight">null</span>;\n  loading: <span class="green">boolean</span>;\n  error: <span class="cyan">string</span> | <span class="highlight">null</span>;\n}\n\n<span class="green">export function</span> <span class="highlight">useApi</span>&lt;T&gt;(url: <span class="cyan">string</span>) {\n  <span class="green">const</span> [state, setState] = useState&lt;ApiState&lt;T&gt;&gt;(...);\n  <span class="green">// Full implementation ready ✓</span>\n}`,
+    tokens:'2,840 / 4,096 tokens'
+  },
+  analyze:{
+    name:'Data Analyst',
+    prompt:'Analyze this Q1 2025 sales data CSV and give me the top 3 insights with recommendations for Q2.',
+    output:`<span class="highlight">📊 Q1 2025 Analysis Complete</span>\n\n<span class="green">Insight 1:</span> Electronics category drove <span class="highlight">42% of revenue</span> — up 18% YoY. Recommendation: increase inventory by 25% for Q2.\n\n<span class="cyan">Insight 2:</span> Mobile orders (67%) outpaced desktop by 2x. Recommendation: prioritize mobile UX improvements.\n\n<span class="green">Insight 3:</span> Tuesday–Thursday peak hours (2–5 PM) account for <span class="highlight">38% of daily conversions</span>. Schedule campaigns accordingly.`,
+    tokens:'3,120 / 4,096 tokens'
+  },
+  chat:{
+    name:'AI Assistant',
+    prompt:'I have a job interview tomorrow at a tech startup for a full-stack developer role. What should I prepare?',
+    output:`<span class="highlight">🎯 Interview Prep Plan for Tomorrow</span>\n\n<span class="green">Technical:</span> Revise DSA basics (arrays, trees, dynamic programming). Practice 5 LeetCode mediums. Review system design fundamentals.\n\n<span class="cyan">Full-Stack Specific:</span> MERN stack architecture, REST vs GraphQL, database indexing, authentication patterns (JWT/OAuth).\n\n<span class="green">Behavioural:</span> Prepare 3 STAR stories. Research the company's tech stack on their GitHub.\n\n<span class="highlight">💡 Pro tip:</span> Ask about their CI/CD pipeline — it shows senior-level thinking.`,
+    tokens:'980 / 4,096 tokens'
+  }
+};
+
+let currentDemo = 'write';
+let demoRunning = false;
+
+function switchDemo(key, el){
+  document.querySelectorAll('.demo-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  currentDemo = key;
+  const d = DEMOS[key];
+  document.getElementById('demoToolName').textContent = d.name;
+  document.getElementById('demoPrompt').innerHTML = d.prompt+'<span class="di-prompt-cursor"></span>';
+  document.getElementById('demoOutput').innerHTML = '';
+  document.getElementById('demoTokens').textContent = d.tokens;
+}
+
+function runDemo(){
+  if(demoRunning) return;
+  demoRunning = true;
+  const out = document.getElementById('demoOutput');
+  out.innerHTML = '<span style="color:var(--muted)">⏳ Generating...</span>';
+  setTimeout(()=>{
+    out.innerHTML = DEMOS[currentDemo].output.replace(/\n/g,'<br/>');
+    demoRunning = false;
+    showToast('✨ Generated! Try other tools too.');
+  }, 1400);
+}
+
+// ── AUTH MODAL ──
+let authMode = 'signin';
+function openAuth(mode){
+  authMode = mode;
+  document.getElementById('authOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  switchAuth(mode);
+}
+function closeAuth(){
+  document.getElementById('authOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleAuthOverlayClick(e){
+  if(e.target === document.getElementById('authOverlay')) closeAuth();
+}
+function switchAuth(mode){
+  authMode = mode;
+  const isSign = mode === 'signin';
+  document.getElementById('authTitle').textContent = isSign ? 'Welcome back' : 'Create your account';
+  document.getElementById('authSub').textContent = isSign ? 'Sign in to your NeuroTask account' : 'Start free — no credit card needed';
+  document.getElementById('signupNameField').style.display = isSign ? 'none' : 'block';
+  document.getElementById('authSubmitBtn').textContent = isSign ? 'Sign In →' : 'Create Account →';
+  document.getElementById('authFooter').innerHTML = isSign
+    ? "Don't have an account? <a href='#' onclick=\"switchAuth('signup');return false\">Create one free →</a>"
+    : "Already have an account? <a href='#' onclick=\"switchAuth('signin');return false\">Sign in →</a>";
+  document.getElementById('signinTab').classList.toggle('active', isSign);
+  document.getElementById('signupTab').classList.toggle('active', !isSign);
+}
+function handleAuth(){
+  const email = document.getElementById('authEmail').value;
+  const pass = document.getElementById('authPass').value;
+  if(!email || !pass){showToast('⚠️ Please fill all fields'); return;}
+  if(!email.includes('@')){showToast('⚠️ Enter a valid email'); return;}
+  if(pass.length < 6){showToast('⚠️ Password must be 6+ characters'); return;}
+  const btn = document.getElementById('authSubmitBtn');
+  btn.textContent = authMode==='signin' ? 'Signing in...' : 'Creating account...';
+  btn.disabled = true;
+  setTimeout(()=>{
+    closeAuth();
+    showToast(authMode==='signin' ? '👋 Welcome back! Redirecting to dashboard...' : '🎉 Account created! Welcome to NeuroTask!');
+    btn.disabled = false;
+    btn.textContent = authMode==='signin' ? 'Sign In →' : 'Create Account →';
+  }, 1500);
+}
+function socialAuth(provider){
+  showToast('🔄 Connecting to '+provider+'...');
+  setTimeout(()=>{
+    closeAuth();
+    showToast('✅ Signed in with '+provider+'! Welcome to NeuroTask.');
+  }, 1600);
+}
+
+// ── CONTACT FORM ──
+document.getElementById('contactForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const btn = document.getElementById('cfBtn');
+  const msg = document.getElementById('cfMsg');
+  btn.disabled=true; btn.textContent='Sending...';
+  try{
+    await emailjs.send("service_pwkfbys","template_clvsbvr",{
+      from_name: document.getElementById('cfname').value,
+      from_email: document.getElementById('cfemail').value,
+      phone: document.getElementById('cfphone').value,
+      website: 'NeuroTask AI · '+document.getElementById('cftopic').value,
+      message: document.getElementById('cfmsg').value,
+    });
+    msg.className='cf-msg ok';
+    msg.textContent='✅ Message sent! We\'ll respond within 2 hours.';
+    msg.style.display='block';
+    this.reset();
+  }catch(err){
+    msg.className='cf-msg err';
+    msg.textContent='❌ Failed to send. WhatsApp us at +91 86884 96208';
+    msg.style.display='block';
+  }
+  btn.disabled=false; btn.textContent='Send Message ✨';
+});
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ── REVEAL ──
+const revealObs = new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('show'), i*80);
+      revealObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+// Auto-run demo on load
+setTimeout(runDemo, 1200);
+</script>
+</body>
+</html>
